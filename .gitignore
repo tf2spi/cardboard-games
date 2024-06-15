@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+*.bin
+
+# Debug files
+*.pdb
+*.debug
+*.dSYM
