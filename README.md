@@ -15,3 +15,4 @@ odin build -o:none -debug <project>
 
 * [sprites/cards.png](https://www.spriters-resource.com/resources/sheets/169/172026.png)
 * [sprites/uno.png](https://www.spriters-resource.com/fullview/200834/) (Ripped by Phongpon)
+* [sprites/chess.png](https://opengameart.org/content/chess-pieces-and-board-squares) (JohnPablok's Cburnett Chess Set)
