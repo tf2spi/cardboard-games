@@ -10,3 +10,8 @@ odin build -o:none -debug <project>
 
 * Solitaire (IN PROGRESS)
 * Chess (TODO AFTER SOLITAIRE)
+
+## Links to Assets
+
+* [sprites/cards.png](https://www.spriters-resource.com/resources/sheets/169/172026.png)
+* [sprites/uno.png](https://www.spriters-resource.com/fullview/200834/) (Ripped by Phongpon)
