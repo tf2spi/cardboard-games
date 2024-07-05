@@ -24,6 +24,8 @@ BG_COLOR :: raylib.Color { 0, 255, 0, 255 }
 DOWN_CARD :: Card { 14, Suit.Diamond }
 NUMBER_MAX :: 13
 SUIT_MAX :: 4
+FOUNDATION_PILES :: 4
+TABLEAU_PILES :: 7
 
 card_from_u8 :: proc(n: u8) -> Card {
 	return Card { int(n % NUMBER_MAX) + 1, Suit(n / NUMBER_MAX) }
@@ -45,7 +47,7 @@ draw_card :: proc(texture: raylib.Texture2D, card: Card, dst: raylib.Vector2) {
 }
 
 main :: proc() {
-	raylib.InitWindow(800, 600, "Solitaire")
+	raylib.InitWindow(1200, 800, "Solitaire")
 
 	img := raylib.LoadImage("sprites/cards.png")
 	tex := raylib.LoadTextureFromImage(img)
@@ -53,21 +55,38 @@ main :: proc() {
 
 	// Initialize card deck and then shuffle it it
 	deck: [NUMBER_MAX * SUIT_MAX]u8
+	remaining := len(deck)
+	rand.shuffle(deck[:])
 	for i : u8 = 0; i < len(deck); i += 1 {
 		deck[i] = i
 	}
-	rand.shuffle(deck[:])
-		for i := 0; i < 5; i += 1 {
-			fmt.println(deck[i])
+
+	// Set up the foundation + tableau
+	foundation: [FOUNDATION_PILES][dynamic]u8
+	tableau: [TABLEAU_PILES][dynamic]u8
+	for i := 0; i < len(foundation); i += 1 {
+		foundation[i] = make([dynamic]u8)
+	}
+	for i := 0; i < len(tableau); i += 1 {
+		tableau[i] = make([dynamic]u8)
+		for j := 0; j <= i; j += 1 {
+			remaining -= 1
+			append(&tableau[i], deck[remaining])
 		}
+	}
+
 
 	raylib.SetTargetFPS(60)
 	for i : uint = 0; !raylib.WindowShouldClose(); i += 1 {
 		raylib.BeginDrawing()
 		raylib.ClearBackground(BG_COLOR)
-		draw_card(tex, DOWN_CARD, raylib.Vector2 {40, 30})
-		for j := 0; j < 5; j += 1 {
-			draw_card(tex, card_from_u8(deck[j]), raylib.Vector2 {f32(50 + 150 * j), 400})
+		draw_card(tex, DOWN_CARD, raylib.Vector2 {60, 60})
+		for j := 0; j < TABLEAU_PILES; j += 1 {
+			pile := tableau[j]
+			for k := 1; k <= len(pile); k += 1 {
+				card := DOWN_CARD if k < len(pile) else card_from_u8(pile[k - 1])
+				draw_card(tex, card, raylib.Vector2 {f32(240 + 120 * j), f32(300 + 20 * k)})
+			}
 		}
 		raylib.EndDrawing()
 	}
